@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Manger</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+.card {
+    border-radius: 0px;
+    border-color: aliceblue ;
+
+}
+.title{
+    text-decoration: underline;
+    text-align:center;
+    margin: 1ch;
+    padding: 2rem;
+}
+.title1{
+    text-decoration:underline;
+    text-align:center; 
+    padding: 1rem; 
+}
+    </style>
+</head> 
+<></>
+
+<body class="bg-dark"  >
+    <div class="container ">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3 ">
+                <!-- Form -->
+                <div class="bg-dark text-light mt-4">
+                    <h1 class=" title text-light">CRUD OPERATION</h1>
+                    <h3 class="title1">ADD INFORMATION</h3>
+                    <div class="card-body">
+                        <input id="fname" type="text" class="form-control" placeholder="Enter Name">
+                        <br>
+                        <input id="avatar" type="text" class="form-control" placeholder=" https: // Paste Avatar URL">
+                        <br>
+                        <input id="mobile" type="text" class="form-control" placeholder="Enter Mobile Number">
+                        <br>
+                        <button onclick="addContact()" type="button" class="btn btn-info btn-lg w-100">Add
+                            Contact</button>
+                    </div>
+                </div>
+                <!-- Form end -->
+
+                <!-- Table -->
+                <table class="table table-warning table-striped table-hover mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="output">
+
+
+                    </tbody>
+                </table>
+                <!-- Table end -->
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h2 class="">Are You Sure You Want To Delete.....!</h2>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                        onclick="handleDelete()">Yes</button>
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update User Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="form-control" placeholder="Enter Name" id="mname">
+                    <br>
+                    <input type="text" class="form-control" placeholder="Enter Avatar" id="mprofile">
+                    <br>
+                    <input type="text" class="form-control" placeholder="Enter Mobilr Number" id="mphone">
+                    <br>
+                    <button type="button" class="btn btn-warning btn-lg w-100" data-bs-dismiss="modal"
+                        onclick="Updateuser()">Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /*
+        CRUD
+        c creat
+        r read
+        u update
+        d delete
+        */
+
+        let deleteindex
+        let editIndex
+        let contact = []
+        let contacts = [
+            {
+                name: "USER NAME",
+                profile: "https://images.unsplash.com/photo-1545996124-0501ebae84d0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGZhY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                phone: "70********27"
+            },
+        
+        ]
+        function addContact() {
+            let fname = document.querySelector("#fname").value
+            let avatar = document.querySelector("#avatar").value
+            let mobile = document.querySelector("#mobile").value
+            let user = {
+                name: fname,
+                profile: avatar,
+                phone: mobile
+            }
+            contacts.push(user)
+            display()
+        }
+
+        function display() {
+
+            let str = ""
+            for (let i = 0; i < contacts.length; i++) {
+                str +=
+                    `
+                <tr>
+                    <th scope="row">${i + 1}</th>
+                    <td>
+                        <img src="${contacts[i].profile} " hight= 50" width=50" class = "rounded-circle">
+                    </td>
+                    <td>${contacts[i].name}</td>
+                    <td>${contacts[i].phone}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="handleEdit(${i})" >Edit </button>
+
+                        <button type="button" class="btn btn-outline-danger" onclick="handleDeleteindex(${i})" data-bs-target="#deleteModal" data-bs-toggle="modal">Delete</button>
+                    </td> 
+                </tr>
+                `
+            }
+            document.querySelector("#output").innerHTML = str
+        }
+        function handleDelete() {
+            contacts.splice(deleteindex, 1)
+            console.log(contacts)
+            display()
+
+        }
+
+        function handleDeleteindex(arg) {
+            deleteindex = arg
+        }
+
+        function handleEdit(index) {
+            editIndex = index
+            console.log(contacts[index].name);
+            console.log(contacts[index].profile);
+            console.log(contacts[index].phone);
+
+            document.querySelector("#mname").value = contacts[index].name
+            document.querySelector("#mprofile").value = contacts[index].profile
+            document.querySelector("#mphone").value = contacts[index].phone
+        }
+        function Updateuser() {
+            let mname = document.querySelector("#mname").value
+            let mprofile = document.querySelector("#mprofile").value
+            let mphone = document.querySelector("#mphone").value
+
+            contacts[editIndex].name = mname
+            contacts[editIndex].profile = mprofile
+            contacts[editIndex].phone = mphone
+            display()
+        }
+
+        display()
+    </script>
+</body>
+
+</html>
